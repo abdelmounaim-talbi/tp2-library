@@ -1,0 +1,23 @@
+
+@startuml
+
+|Member|
+start
+:Bring back a copy;
+
+|System|
+:Close the loan;
+
+if (Return is late?) then (yes)
+    :Activate extension point late return;
+    :Suspend the member;
+endif
+
+if (Book reserved?) then (yes)
+    :Keep the copy aside;
+    :Notify the member who reserved it;
+endif
+
+stop
+
+@enduml

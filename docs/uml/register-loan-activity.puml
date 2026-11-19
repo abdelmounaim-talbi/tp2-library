@@ -1,0 +1,44 @@
+
+@startuml
+
+|Librarian|
+start
+:Identify the member by scanning their card;
+
+|System|
+:Display member information and current loans;
+:Check the member's borrowing rights;
+
+if (Borrowing rights valid?) then (yes)
+
+    repeat
+        |Librarian|
+        :Scan barcode of a copy;
+
+        |System|
+        :Check copy availability and reservation;
+
+        if (Copy available and not reserved?) then (yes)
+            :Record loan with due date 14 days later;
+            :Mark copy as borrowed;
+        else (no)
+            :Refuse this copy;
+            :Display the reservation;
+        endif
+
+    repeat while (Another copy?) is (yes)
+    ->no;
+
+    |Librarian|
+    :End the transaction;
+
+    |System|
+    :Print receipt with copies and due dates;
+
+else (no)
+    :Display the reason (suspended or overdue loan);
+    stop
+endif
+
+stop
+@enduml
