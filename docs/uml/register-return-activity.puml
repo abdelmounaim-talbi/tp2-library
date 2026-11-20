@@ -3,21 +3,41 @@
 
 |Member|
 start
-:Bring back a copy;
+:Return a copy;
+
+|Librarian|
+:Scan the barcode;
 
 |System|
-:Close the loan;
-
-if (Return is late?) then (yes)
-    :Activate extension point late return;
-    :Suspend the member;
+if (Barcode readable?) then (yes)
+    :Identify the copy;
+else (no)
+    |Librarian|
+    :Enter the inventory number;
+    |System|
+    :Identify the copy;
 endif
 
-if (Book reserved?) then (yes)
-    :Keep the copy aside;
-    :Notify the member who reserved it;
+if (Copy is on loan?) then (yes)
+    :Close the loan;
+
+    if (Return is late?) then (yes)
+        :Suspend the member;
+    endif
+
+    if (Book reserved?) then (yes)
+        :Keep the copy aside;
+        :Notify the member by email;
+    else (no)
+        :Mark the copy as available;
+    endif
+
+    :Print the receipt;
+
+else (no)
+    :Display error message;
+    stop
 endif
 
 stop
-
 @enduml

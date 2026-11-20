@@ -6,30 +6,36 @@ Register a returned copy and close its loan.
 
 ## Actors
 Primary actor: Librarian.
-Supporting actor: Member.
+Secondary actors: Member, Mail server.
 
 ## Preconditions
-The member has a borrowed copy to return.
+The librarian is authenticated.
 
 ## Trigger
-The member brings back a copy to the library.
+A member presents a copy to return.
 
 ## Main success scenario
-1. The member returns the copy.
-2. The librarian registers the returned copy.
-3. The system closes the loan.
-4. The system checks whether the return is late.
-5. The system checks whether the book is reserved.
-6. If the book is reserved, the system keeps the copy aside and notifies the member who reserved it.
+1. The librarian identifies the member.
+2. The system displays the member's information and current loans.
+3. The librarian scans the barcode of the copy.
+4. The system identifies the copy and checks that it is on loan.
+5. The system closes the loan.
+6. The system checks whether the return is late.
+7. The system checks whether the copy is reserved.
+8. If the copy is reserved, the system keeps it aside and notifies the member by email.
+9. If the copy is not reserved, the system marks it as available.
+10. The system prints the receipt.
 
 ## Alternative flows
-6a. If the book is not reserved, no reservation action is required.
+1a. The barcode cannot be read: the librarian enters the inventory number; the use case continues at step 4.
 
-## Extensions
-4a. If the return is late, the extension point "late return" is activated and the use case "Suspend the member" is executed.
+## Exceptions
+2a. The copy is not on loan: the system displays an error message and the use case ends.
+
+*a. At any time, if the database connection is lost, the system displays an error.
 
 ## Postconditions
 - The loan is closed.
-- If the book is reserved, the copy is kept aside.
-- The member who reserved the book is notified.
-- If the return is late, the use case "Suspend the member" is activated.
+- The copy is marked as available if it is not reserved.
+- If reserved, the copy is kept aside and the member is notified.
+- A receipt is printed.
